@@ -22,7 +22,7 @@ const SidebarLink = ({ to, icon: Icon, children }) => (
     </NavLink>
 );
 
-export const Sidebar = ({ isOpen, toggleSidebar }) => {
+const Sidebar = ({ isOpen, toggleSidebar }) => {
     const { budget, totals } = useFinance();
     const { user, logout } = useAuth();
     const isOverBudget = budget > 0 && totals.expenses > budget;
@@ -46,7 +46,6 @@ export const Sidebar = ({ isOpen, toggleSidebar }) => {
                 )}
             >
                 <div className="flex flex-col h-full">
-                    {/* Logo Area */}
                     <div className="p-6 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/30">
@@ -69,14 +68,12 @@ export const Sidebar = ({ isOpen, toggleSidebar }) => {
                         </button>
                     </div>
 
-                    {/* Navigation */}
                     <nav className="flex-1 px-4 space-y-2 py-4">
                         <SidebarLink to="/" icon={LayoutDashboard}>Dashboard</SidebarLink>
                         <SidebarLink to="/transactions" icon={ReceiptText}>Transactions</SidebarLink>
                         <SidebarLink to="/reports" icon={PieChart}>Reports</SidebarLink>
                     </nav>
 
-                    {/* User Section */}
                     <div className="p-4 border-t border-slate-200 dark:border-slate-800">
                         <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50">
                             <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold">
@@ -89,7 +86,6 @@ export const Sidebar = ({ isOpen, toggleSidebar }) => {
                             <button
                                 onClick={logout}
                                 className="p-2 text-slate-400 hover:text-red-500 transition-colors"
-                                title="Sign Out"
                             >
                                 <LogOut className="w-5 h-5" />
                             </button>
@@ -100,3 +96,5 @@ export const Sidebar = ({ isOpen, toggleSidebar }) => {
         </>
     );
 };
+
+export { Sidebar };

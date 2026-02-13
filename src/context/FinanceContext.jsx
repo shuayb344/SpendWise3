@@ -13,6 +13,13 @@ export const FinanceProvider = ({ children }) => {
         // Simulate initial load for skeletons
         const timer = setTimeout(() => {
             setLoading(false);
+
+            // Check for new signup to auto-seed
+            const isNewSignup = localStorage.getItem('spendwise_new_signup');
+            if (isNewSignup === 'true' && transactions.length === 0) {
+                setTransactions(sampleTransactions);
+                localStorage.removeItem('spendwise_new_signup');
+            }
         }, 1000);
         return () => clearTimeout(timer);
     }, []);

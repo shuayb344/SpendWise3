@@ -3,7 +3,7 @@ import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export const AppLayout = ({ children }) => {
+const AppLayout = ({ children }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -32,3 +32,5 @@ export const AppLayout = ({ children }) => {
         </div>
     );
 };
+
+export default AppLayout;

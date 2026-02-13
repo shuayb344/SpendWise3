@@ -20,11 +20,14 @@ export const AuthProvider = ({ children }) => {
         const mockUser = { id: Date.now().toString(), email, name };
         setUser(mockUser);
         localStorage.setItem('spendwise_user', JSON.stringify(mockUser));
+        // Signal for auto-seeding
+        localStorage.setItem('spendwise_new_signup', 'true');
     };
 
     const logout = () => {
         setUser(null);
         localStorage.removeItem('spendwise_user');
+        localStorage.removeItem('spendwise_new_signup');
     };
 
     return (

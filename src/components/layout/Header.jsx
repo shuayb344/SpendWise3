@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Sun, Moon, Menu } from 'lucide-react';
 import { storageService } from '../../services/storageService';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export const Header = ({ toggleSidebar }) => {
     const [isDark, setIsDark] = useState(() => storageService.getTheme() === 'dark');
@@ -30,10 +31,20 @@ export const Header = ({ toggleSidebar }) => {
             <div className="flex items-center gap-4">
                 <button
                     onClick={() => setIsDark(!isDark)}
-                    className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:scale-110 transition-transform active:scale-95 shadow-sm"
+                    className="relative p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:scale-110 transition-all active:scale-95 shadow-sm overflow-hidden"
                     aria-label="Toggle Theme"
                 >
-                    {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                    <AnimatePresence mode="wait" initial={false}>
+                        <motion.div
+                            key={isDark ? 'dark' : 'light'}
+                            initial={{ y: 20, opacity: 0, rotate: -45 }}
+                            animate={{ y: 0, opacity: 1, rotate: 0 }}
+                            exit={{ y: -20, opacity: 0, rotate: 45 }}
+                            transition={{ duration: 0.2, ease: "easeInOut" }}
+                        >
+                            {isDark ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-indigo-600" />}
+                        </motion.div>
+                    </AnimatePresence>
                 </button>
             </div>
         </header>
