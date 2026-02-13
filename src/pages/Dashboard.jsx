@@ -2,6 +2,7 @@ import React from 'react';
 import { useFinance } from '../context/FinanceContext';
 import { SummaryCards } from '../components/dashboard/SummaryCards';
 import { RecentTransactions } from '../components/dashboard/RecentTransactions';
+import { CategoryPieChart } from '../components/charts/CategoryPieChart';
 import { Card } from '../components/ui';
 import { BarChart3, TrendingUp } from 'lucide-react';
 
