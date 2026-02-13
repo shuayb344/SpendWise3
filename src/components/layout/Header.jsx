@@ -4,24 +4,34 @@ import { storageService } from '../../services/storageService';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const Header = ({ toggleSidebar }) => {
-    const [isDark, setIsDark] = useState(() => storageService.getTheme() === 'dark');
+    const [isDark, setIsDark] = useState(() => {
+        const savedTheme = storageService.getTheme();
+        return savedTheme === 'dark';
+    });
 
+    // Handle initial state and state changes
     useEffect(() => {
+        const root = window.document.documentElement;
         if (isDark) {
-            document.documentElement.classList.add('dark');
+            root.classList.add('dark');
             storageService.saveTheme('dark');
         } else {
-            document.documentElement.classList.remove('dark');
+            root.classList.remove('dark');
             storageService.saveTheme('light');
         }
     }, [isDark]);
 
+    const handleToggle = () => {
+        setIsDark(prev => !prev);
+    };
+
     return (
-        <header className="sticky top-0 z-30 flex items-center justify-between p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 lg:px-8">
+        <header className="sticky top-0 z-30 flex items-center justify-between p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 lg:px-8 transition-colors duration-300">
             <div className="flex items-center gap-4">
                 <button
                     onClick={toggleSidebar}
                     className="p-2 text-slate-500 lg:hidden hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                    aria-label="Toggle Sidebar"
                 >
                     <Menu className="w-6 h-6" />
                 </button>
@@ -30,19 +40,24 @@ export const Header = ({ toggleSidebar }) => {
 
             <div className="flex items-center gap-4">
                 <button
-                    onClick={() => setIsDark(!isDark)}
-                    className="relative p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:scale-110 transition-all active:scale-95 shadow-sm overflow-hidden"
+                    onClick={handleToggle}
+                    className="relative p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:scale-110 active:scale-95 shadow-sm transition-all duration-300"
                     aria-label="Toggle Theme"
                 >
                     <AnimatePresence mode="wait" initial={false}>
                         <motion.div
-                            key={isDark ? 'dark' : 'light'}
-                            initial={{ y: 20, opacity: 0, rotate: -45 }}
+                            key={isDark ? 'sun' : 'moon'}
+                            initial={{ y: 20, opacity: 0, rotate: -90 }}
                             animate={{ y: 0, opacity: 1, rotate: 0 }}
-                            exit={{ y: -20, opacity: 0, rotate: 45 }}
-                            transition={{ duration: 0.2, ease: "easeInOut" }}
+                            exit={{ y: -20, opacity: 0, rotate: 90 }}
+                            transition={{ duration: 0.25, ease: "backOut" }}
+                            className="flex items-center justify-center"
                         >
-                            {isDark ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-indigo-600" />}
+                            {isDark ? (
+                                <Sun className="w-5 h-5 text-amber-500" />
+                            ) : (
+                                <Moon className="w-5 h-5 text-indigo-600" />
+                            )}
                         </motion.div>
                     </AnimatePresence>
                 </button>
