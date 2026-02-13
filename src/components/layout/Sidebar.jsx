@@ -1,7 +1,6 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, ReceiptText, PieChart, Wallet, LogOut, Menu, X } from 'lucide-react';
+import { LayoutDashboard, ReceiptText, PieChart, Wallet, LogOut, Menu, X, AlertCircle } from 'lucide-react';
 import { cn } from '../../utils/helpers';
+import { useFinance } from '../../context/FinanceContext';
 
 const SidebarLink = ({ to, icon: Icon, children }) => (
     <NavLink
