@@ -25,6 +25,11 @@ const Dashboard = () => {
 
                 <div className="space-y-6">
                     <Card className="p-6">
+                        <h3 className="font-bold text-slate-900 dark:text-white mb-6 text-center">Expense Structure</h3>
+                        <CategoryPieChart transactions={transactions} />
+                    </Card>
+
+                    <Card className="p-6">
                         <h3 className="font-bold text-slate-900 dark:text-white mb-4">Quick Insights</h3>
                         <div className="space-y-4">
                             <div className="p-4 bg-indigo-50 dark:bg-indigo-900/10 rounded-xl border border-indigo-100 dark:border-indigo-900/20">
@@ -35,7 +40,7 @@ const Dashboard = () => {
                                 <p className="text-sm text-slate-600 dark:text-slate-400">
                                     {transactions.length === 0
                                         ? "Add some transactions to start seeing insights!"
-                                        : "You've spent most of your money on Food this month. Consider cooking more at home."}
+                                        : "You're doing great! Keep an eye on your recurring expenses to save more."}
                                 </p>
                             </div>
 
@@ -45,7 +50,7 @@ const Dashboard = () => {
                                     <span>Savings Target</span>
                                 </div>
                                 <p className="text-sm text-slate-600 dark:text-slate-400">
-                                    You are 15% away from your monthly savings goal. Keep it up!
+                                    Set a monthly budget to help you reach your savings goals faster.
                                 </p>
                             </div>
                         </div>

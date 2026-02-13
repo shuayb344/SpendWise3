@@ -2,10 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { FinanceProvider } from './context/FinanceContext';
 import { AppLayout } from './components/layout/AppLayout';
-
-import Dashboard from './pages/Dashboard';
-import Transactions from './pages/Transactions';
-const Reports = () => <h1 className="text-2xl font-bold dark:text-white">Reports</h1>;
+import { Dashboard, Transactions, Reports } from './pages';
 
 function App() {
   return (
