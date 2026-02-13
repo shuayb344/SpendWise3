@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, ReceiptText, PieChart, Wallet, LogOut, Menu, X, AlertCircle } from 'lucide-react';
 import { cn } from '../../utils/helpers';
 import { useFinance } from '../../context/FinanceContext';
+import { useAuth } from '../../context/AuthContext';
 
 const SidebarLink = ({ to, icon: Icon, children }) => (
     <NavLink
@@ -23,7 +24,10 @@ const SidebarLink = ({ to, icon: Icon, children }) => (
 
 export const Sidebar = ({ isOpen, toggleSidebar }) => {
     const { budget, totals } = useFinance();
+    const { user, logout } = useAuth();
     const isOverBudget = budget > 0 && totals.expenses > budget;
+
+    const initials = user?.name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
 
     return (
         <>
@@ -76,13 +80,17 @@ export const Sidebar = ({ isOpen, toggleSidebar }) => {
                     <div className="p-4 border-t border-slate-200 dark:border-slate-800">
                         <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50">
                             <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold">
-                                JS
+                                {initials}
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">John Spend</p>
-                                <p className="text-xs text-slate-500 dark:text-slate-400 truncate">Premium Plan</p>
+                                <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">{user?.name || 'User'}</p>
+                                <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{user?.email || 'N/A'}</p>
                             </div>
-                            <button className="p-2 text-slate-400 hover:text-red-500 transition-colors">
+                            <button
+                                onClick={logout}
+                                className="p-2 text-slate-400 hover:text-red-500 transition-colors"
+                                title="Sign Out"
+                            >
                                 <LogOut className="w-5 h-5" />
                             </button>
                         </div>
