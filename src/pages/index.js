@@ -1,5 +1,5 @@
-import Dashboard from './pages/Dashboard';
-import Transactions from './pages/Transactions';
-import Reports from './pages/Reports';
+import Dashboard from './Dashboard';
+import Transactions from './Transactions';
+import Reports from './Reports';
 
 export { Dashboard, Transactions, Reports };
