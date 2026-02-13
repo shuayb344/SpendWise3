@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { storageService } from '../services/storageService';
+import { sampleTransactions } from '../utils/sampleData';
 
 const FinanceContext = createContext();
 
@@ -49,14 +50,9 @@ export const FinanceProvider = ({ children }) => {
         setTransactions((prev) => [newTransaction, ...prev]);
     };
 
-    const deleteTransaction = (id) => {
-        setTransactions((prev) => prev.filter((t) => t.id !== id));
-    };
-
-    const updateTransaction = (id, updatedData) => {
-        setTransactions((prev) =>
-            prev.map((t) => (t.id === id ? { ...t, ...updatedData } : t))
-        );
+    const seedTransactions = () => {
+        const { sampleTransactions } = import.meta.glob('../utils/sampleData.js', { eager: true });
+        setTransactions(sampleTransactions);
     };
 
     const value = {
@@ -67,6 +63,7 @@ export const FinanceProvider = ({ children }) => {
         addTransaction,
         deleteTransaction,
         updateTransaction,
+        seedTransactions,
         loading
     };
 
