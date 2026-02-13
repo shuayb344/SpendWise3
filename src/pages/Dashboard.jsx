@@ -14,7 +14,7 @@ const Dashboard = () => {
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Dashboard Overview</h1>
-                    <p className="text-slate-500 dark:text-slate-400 mt-1">Keep your finances under control with ease.</p>
+                    <p className="text-slate-500 dark:text-slate-400 mt-1 font-medium">Keep your finances under control with ease.</p>
                 </div>
             </div>
 
@@ -28,7 +28,7 @@ const Dashboard = () => {
                 <div className="space-y-8">
                     <BudgetManager />
 
-                    <Card className="p-6 border-indigo-100 dark:border-indigo-900/30">
+                    <Card className="p-6 border-indigo-100 dark:border-indigo-900/30 bg-white dark:bg-slate-900/50">
                         <h3 className="font-bold text-slate-900 dark:text-white mb-6 text-center text-sm uppercase tracking-wider">Expense Breakdown</h3>
                         <CategoryPieChart transactions={transactions} />
                     </Card>

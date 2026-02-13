@@ -14,50 +14,31 @@
   --color-indigo-950: oklch(0.202 0.103 316);
 }
 
-/* Premium Design Tokens */
+/* 
+  Tailwind v4 - Manual Dark Mode Configuration
+  By default v4 uses color-scheme: dark. 
+  We will force class-based dark mode by defining our own variant.
+*/
+@variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #f8fafc;
   --foreground: #0f172a;
   --card: #ffffff;
-  --card-foreground: #0f172a;
-  --popover: #ffffff;
-  --popover-foreground: #0f172a;
-  --primary: #4f46e5;
-  --primary-foreground: #ffffff;
-  --secondary: #f1f5f9;
-  --secondary-foreground: #0f172a;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --accent: #f1f5f9;
-  --accent-foreground: #0f172a;
-  --destructive: #ef4444;
-  --destructive-foreground: #ffffff;
   --border: #e2e8f0;
-  --input: #e2e8f0;
-  --ring: #4f46e5;
-  --radius: 0.75rem;
+  --sidebar: #ffffff;
+  --header: rgba(255, 255, 255, 0.8);
+  color-scheme: light;
 }
 
-:root.dark {
+.dark {
   --background: #020617;
   --foreground: #f8fafc;
   --card: #0f172a;
-  --card-foreground: #f8fafc;
-  --popover: #0f172a;
-  --popover-foreground: #f8fafc;
-  --primary: #6366f1;
-  --primary-foreground: #ffffff;
-  --secondary: #1e293b;
-  --secondary-foreground: #f8fafc;
-  --muted: #1e293b;
-  --muted-foreground: #94a3b8;
-  --accent: #1e293b;
-  --accent-foreground: #f8fafc;
-  --destructive: #7f1d1d;
-  --destructive-foreground: #f8fafc;
   --border: #1e293b;
-  --input: #1e293b;
-  --ring: #6366f1;
+  --sidebar: #0f172a;
+  --header: rgba(15, 23, 42, 0.8);
+  color-scheme: dark;
 }
 
 body {
@@ -67,40 +48,19 @@ body {
   @apply antialiased transition-colors duration-300;
 }
 
-/* Force dark mode class selection for all standard Tailwind utilities */
-.dark body {
+/* Force consistency on specific layout elements */
+#root,
+.app-container {
   background-color: var(--background);
   color: var(--foreground);
 }
 
-/* Base Component Styling with Tokens */
-.card-base {
-  background-color: var(--card);
-  color: var(--card-foreground);
-  border: 1px solid var(--border);
-  @apply shadow-sm rounded-xl overflow-hidden transition-all duration-300;
+/* Smooth transitions for all themeable elements */
+* {
+  @apply transition-colors duration-300;
 }
 
-.input-base {
-  background-color: var(--card);
-  border: 1px solid var(--border);
-  color: var(--foreground);
-  @apply w-full px-3 py-2 rounded-lg outline-none transition-all duration-300 focus:ring-2 focus:ring-indigo-500/50;
-}
-
-/* Glassmorphism 2.0 */
-.glass {
-  @apply backdrop-blur-md border transition-all duration-300;
-  background-color: rgba(255, 255, 255, 0.7);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.dark .glass {
-  background-color: rgba(15, 23, 42, 0.7);
-  border-color: rgba(30, 41, 59, 0.5);
-}
-
-/* Scrollbar Style */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -110,25 +70,10 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-200 dark:bg-slate-800 rounded-full hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors;
+  @apply bg-slate-200 dark:bg-slate-800 rounded-full hover:bg-slate-300 dark:hover:bg-slate-700;
 }
 
-@keyframes shake {
-
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-
-  25% {
-    transform: translateX(-4px);
-  }
-
-  75% {
-    transform: translateX(4px);
-  }
-}
-
-.animate-shake {
-  animation: shake 0.4s ease-in-out;
+/* UI Component Fixes */
+.glass {
+  @apply backdrop-blur-md border border-white/20 dark:border-slate-800/20;
 }
