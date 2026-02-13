@@ -3,17 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { FinanceProvider } from './context/FinanceContext';
 import { AppLayout } from './components/layout/AppLayout';
 
-// Placeholder Pages
-const Dashboard = () => (
-  <div className="space-y-6">
-    <h1 className="text-2xl font-bold dark:text-white">Welcome back, John!</h1>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div className="h-32 bg-indigo-500 rounded-2xl"></div>
-      <div className="h-32 bg-emerald-500 rounded-2xl"></div>
-      <div className="h-32 bg-rose-500 rounded-2xl"></div>
-    </div>
-  </div>
-);
+import Dashboard from './pages/Dashboard';
 
 const Transactions = () => <h1 className="text-2xl font-bold dark:text-white">Transactions</h1>;
 const Reports = () => <h1 className="text-2xl font-bold dark:text-white">Reports</h1>;
