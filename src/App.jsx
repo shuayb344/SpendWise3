@@ -1,35 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { FinanceProvider } from './context/FinanceContext';
+import { AppLayout } from './components/layout/AppLayout';
+
+// Placeholder Pages
+const Dashboard = () => (
+  <div className="space-y-6">
+    <h1 className="text-2xl font-bold dark:text-white">Welcome back, John!</h1>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="h-32 bg-indigo-500 rounded-2xl"></div>
+      <div className="h-32 bg-emerald-500 rounded-2xl"></div>
+      <div className="h-32 bg-rose-500 rounded-2xl"></div>
+    </div>
+  </div>
+);
+
+const Transactions = () => <h1 className="text-2xl font-bold dark:text-white">Transactions</h1>;
+const Reports = () => <h1 className="text-2xl font-bold dark:text-white">Reports</h1>;
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Router>
+      <FinanceProvider>
+        <AppLayout>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/transactions" element={<Transactions />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="*" element={<Dashboard />} />
+          </Routes>
+        </AppLayout>
+      </FinanceProvider>
+    </Router>
+  );
 }
 
-export default App
+export default App;
