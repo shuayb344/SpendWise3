@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { TransactionForm } from '../components/transactions/TransactionForm';
 import { TransactionList } from '../components/transactions/TransactionList';
+import { CSVExport } from '../components/transactions/CSVExport';
 import { Button, Card } from '../components/ui';
-import { Plus, X, Download } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Transactions = () => {
@@ -16,9 +17,7 @@ const Transactions = () => {
                     <p className="text-slate-500 dark:text-slate-400">Manage and track your historical spending.</p>
                 </div>
                 <div className="flex gap-3">
-                    <Button variant="outline" className="hidden sm:flex" onClick={() => {/* Mock CSV */ }}>
-                        <Download className="w-4 h-4" /> Export CSV
-                    </Button>
+                    <CSVExport />
                     <Button onClick={() => setIsFormOpen(true)}>
                         <Plus className="w-4 h-4" /> Add New
                     </Button>
