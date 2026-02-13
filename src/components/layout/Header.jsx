@@ -9,14 +9,15 @@ export const Header = ({ toggleSidebar }) => {
         return savedTheme === 'dark';
     });
 
-    // Handle initial state and state changes
     useEffect(() => {
-        const root = window.document.documentElement;
+        const root = document.documentElement;
         if (isDark) {
             root.classList.add('dark');
+            root.style.colorScheme = 'dark';
             storageService.saveTheme('dark');
         } else {
             root.classList.remove('dark');
+            root.style.colorScheme = 'light';
             storageService.saveTheme('light');
         }
     }, [isDark]);
@@ -47,10 +48,10 @@ export const Header = ({ toggleSidebar }) => {
                     <AnimatePresence mode="wait" initial={false}>
                         <motion.div
                             key={isDark ? 'sun' : 'moon'}
-                            initial={{ y: 20, opacity: 0, rotate: -90 }}
-                            animate={{ y: 0, opacity: 1, rotate: 0 }}
-                            exit={{ y: -20, opacity: 0, rotate: 90 }}
-                            transition={{ duration: 0.25, ease: "backOut" }}
+                            initial={{ scale: 0, rotate: -90, opacity: 0 }}
+                            animate={{ scale: 1, rotate: 0, opacity: 1 }}
+                            exit={{ scale: 0, rotate: 90, opacity: 0 }}
+                            transition={{ type: "spring", stiffness: 200, damping: 20 }}
                             className="flex items-center justify-center"
                         >
                             {isDark ? (

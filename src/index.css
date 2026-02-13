@@ -15,7 +15,7 @@
 }
 
 :root {
-  --background: white;
+  --background: #f8fafc;
   --foreground: #0f172a;
 }
 
@@ -29,7 +29,11 @@ body {
   @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50 antialiased transition-colors duration-300;
 }
 
-/* Custom Scrollbar */
+/* Glassmorphism */
+.glass {
+  @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border border-white/20 dark:border-slate-800/20;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -42,19 +46,6 @@ body {
   @apply bg-slate-200 dark:bg-slate-800 rounded-full hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors;
 }
 
-/* Glassmorphism Utilities */
-.glass {
-  @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border border-white/20 dark:border-slate-800/20;
-}
-
-/* Input Styles Fix for Light Mode */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Animations */
 @keyframes pulse-soft {
 
   0%,

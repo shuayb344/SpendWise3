@@ -1,15 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Outlet } from 'react-router-dom';
 
-const AppLayout = ({ children }) => {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+const AppLayout = () => {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1024);
 
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
+    // Ensure responsive sidebar behavior
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth >= 1024) {
+                setIsSidebarOpen(true);
+            }
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     return (
-        <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+        <div className="flex h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
             <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
             <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
@@ -24,7 +36,7 @@ const AppLayout = ({ children }) => {
                             transition={{ duration: 0.3 }}
                             className="max-w-7xl mx-auto w-full"
                         >
-                            {children}
+                            <Outlet />
                         </motion.div>
                     </AnimatePresence>
                 </main>
