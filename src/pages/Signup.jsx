@@ -2,20 +2,26 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Button, Card, Input } from '../components/ui';
-import { Wallet, Mail, Lock, User, ArrowRight } from 'lucide-react';
+import { Wallet, Mail, Lock, User, ArrowRight, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Signup = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const { signup } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        signup(name, email, password);
-        navigate('/');
+        setError('');
+        const res = signup(name, email, password);
+        if (res.success) {
+            navigate('/');
+        } else {
+            setError(res.message);
+        }
     };
 
     return (
@@ -34,6 +40,13 @@ const Signup = () => {
                 </div>
 
                 <Card className="p-8 border-none shadow-2xl shadow-slate-200/50 dark:shadow-none bg-white dark:bg-slate-900">
+                    {error && (
+                        <div className="mb-6 p-4 bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-900/30 rounded-xl flex items-center gap-3 text-rose-600 dark:text-rose-400 text-sm font-medium animate-shake">
+                            <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                            {error}
+                        </div>
+                    )}
+
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <Input
                             label="Full Name"
