@@ -1,36 +1,45 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
-import { storageService } from '../services/storageService';
-import { sampleTransactions } from '../utils/sampleData';
+import { useAuth } from './AuthContext';
 
 const FinanceContext = createContext();
 
 export const FinanceProvider = ({ children }) => {
-    const [transactions, setTransactions] = useState(() => storageService.getTransactions());
-    const [budget, setBudget] = useState(() => storageService.getBudget());
+    const { user } = useAuth();
+    const userId = user?.id;
+
+    const [transactions, setTransactions] = useState([]);
+    const [budget, setBudget] = useState(0);
     const [loading, setLoading] = useState(true);
 
+    // Load user data when userId changes
     useEffect(() => {
-        // Simulate initial load for skeletons
-        const timer = setTimeout(() => {
+        if (userId) {
+            const savedTransactions = localStorage.getItem(`spendwise_transactions_${userId}`);
+            const savedBudget = localStorage.getItem(`spendwise_budget_${userId}`);
+
+            setTransactions(savedTransactions ? JSON.parse(savedTransactions) : []);
+            setBudget(savedBudget ? JSON.parse(savedBudget) : 0);
+
             setLoading(false);
+        } else {
+            setTransactions([]);
+            setBudget(0);
+            setLoading(true);
+        }
+    }, [userId]);
 
-            // Check for new signup to auto-seed
-            const isNewSignup = localStorage.getItem('spendwise_new_signup');
-            if (isNewSignup === 'true' && transactions.length === 0) {
-                setTransactions(sampleTransactions);
-                localStorage.removeItem('spendwise_new_signup');
-            }
-        }, 1000);
-        return () => clearTimeout(timer);
-    }, []);
+    // Save user data when it changes
+    useEffect(() => {
+        if (userId) {
+            localStorage.setItem(`spendwise_transactions_${userId}`, JSON.stringify(transactions));
+        }
+    }, [transactions, userId]);
 
     useEffect(() => {
-        storageService.saveTransactions(transactions);
-    }, [transactions]);
-
-    useEffect(() => {
-        storageService.saveBudget(budget);
-    }, [budget]);
+        if (userId) {
+            localStorage.setItem(`spendwise_budget_${userId}`, JSON.stringify(budget));
+        }
+    }, [budget, userId]);
 
     const totals = useMemo(() => {
         return transactions.reduce(
@@ -68,10 +77,6 @@ export const FinanceProvider = ({ children }) => {
         );
     };
 
-    const seedTransactions = () => {
-        setTransactions(sampleTransactions);
-    };
-
     const value = {
         transactions,
         totals,
@@ -80,7 +85,6 @@ export const FinanceProvider = ({ children }) => {
         addTransaction,
         deleteTransaction,
         updateTransaction,
-        seedTransactions,
         loading
     };
 

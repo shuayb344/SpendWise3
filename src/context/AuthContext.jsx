@@ -4,30 +4,47 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(() => {
-        const savedUser = localStorage.getItem('spendwise_user');
+        const savedUser = localStorage.getItem('spendwise_session');
         return savedUser ? JSON.parse(savedUser) : null;
     });
 
+    const [users, setUsers] = useState(() => {
+        const savedUsers = localStorage.getItem('spendwise_registered_users');
+        return savedUsers ? JSON.parse(savedUsers) : [];
+    });
+
+    useEffect(() => {
+        localStorage.setItem('spendwise_registered_users', JSON.stringify(users));
+    }, [users]);
+
     const login = (email, password) => {
-        // Mock authentication
-        const mockUser = { id: '1', email, name: email.split('@')[0] };
-        setUser(mockUser);
-        localStorage.setItem('spendwise_user', JSON.stringify(mockUser));
+        const existingUser = users.find(u => u.email === email && u.password === password);
+        if (existingUser) {
+            const sessionUser = { id: existingUser.id, email: existingUser.email, name: existingUser.name };
+            setUser(sessionUser);
+            localStorage.setItem('spendwise_session', JSON.stringify(sessionUser));
+            return { success: true };
+        }
+        return { success: false, message: 'Invalid email or password' };
     };
 
     const signup = (name, email, password) => {
-        // Mock signup
-        const mockUser = { id: Date.now().toString(), email, name };
-        setUser(mockUser);
-        localStorage.setItem('spendwise_user', JSON.stringify(mockUser));
-        // Signal for auto-seeding
-        localStorage.setItem('spendwise_new_signup', 'true');
+        if (users.find(u => u.email === email)) {
+            return { success: false, message: 'User already exists' };
+        }
+        const newUser = { id: Date.now().toString(), name, email, password };
+        const updatedUsers = [...users, newUser];
+        setUsers(updatedUsers);
+
+        const sessionUser = { id: newUser.id, email: newUser.email, name: newUser.name };
+        setUser(sessionUser);
+        localStorage.setItem('spendwise_session', JSON.stringify(sessionUser));
+        return { success: true };
     };
 
     const logout = () => {
         setUser(null);
-        localStorage.removeItem('spendwise_user');
-        localStorage.removeItem('spendwise_new_signup');
+        localStorage.removeItem('spendwise_session');
     };
 
     return (
