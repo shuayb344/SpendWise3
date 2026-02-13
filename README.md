@@ -12,6 +12,13 @@ SpendWise is a production-level Personal Finance Dashboard built with React, fea
 - **Premium UI/UX**: Built with Tailwind CSS, featuring a responsive design, smooth animations (Framer Motion), and dark mode support.
 - **Accessiblity**: Semantic HTML and keyboard-navigable components.
 
+
+🔗 Live Demo
+
+    https://spend-wise3.vercel.app/
+
+
+
 ## 🧱 Tech Stack
 
 - **Framework**: React (Vite)
