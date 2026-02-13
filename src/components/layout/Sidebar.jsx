@@ -1,3 +1,5 @@
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, ReceiptText, PieChart, Wallet, LogOut, Menu, X, AlertCircle } from 'lucide-react';
 import { cn } from '../../utils/helpers';
 import { useFinance } from '../../context/FinanceContext';
@@ -20,6 +22,9 @@ const SidebarLink = ({ to, icon: Icon, children }) => (
 );
 
 export const Sidebar = ({ isOpen, toggleSidebar }) => {
+    const { budget, totals } = useFinance();
+    const isOverBudget = budget > 0 && totals.expenses > budget;
+
     return (
         <>
             {/* Mobile Backdrop */}
@@ -39,11 +44,18 @@ export const Sidebar = ({ isOpen, toggleSidebar }) => {
                 <div className="flex flex-col h-full">
                     {/* Logo Area */}
                     <div className="p-6 flex items-center justify-between">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-3">
                             <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/30">
                                 <Wallet className="w-6 h-6 text-white" />
                             </div>
-                            <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">SpendWise</h1>
+                            <div>
+                                <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight leading-none">SpendWise</h1>
+                                {isOverBudget && (
+                                    <span className="flex items-center gap-1 text-[10px] text-rose-500 font-black mt-1 uppercase animate-pulse">
+                                        <AlertCircle className="w-2 h-2" /> Over Budget
+                                    </span>
+                                )}
+                            </div>
                         </div>
                         <button
                             onClick={toggleSidebar}
@@ -60,7 +72,7 @@ export const Sidebar = ({ isOpen, toggleSidebar }) => {
                         <SidebarLink to="/reports" icon={PieChart}>Reports</SidebarLink>
                     </nav>
 
-                    {/* User Section (Optional Mock) */}
+                    {/* User Section */}
                     <div className="p-4 border-t border-slate-200 dark:border-slate-800">
                         <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50">
                             <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold">
