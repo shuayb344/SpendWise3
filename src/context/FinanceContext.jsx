@@ -28,12 +28,13 @@ export const FinanceProvider = ({ children }) => {
     const totals = useMemo(() => {
         return transactions.reduce(
             (acc, curr) => {
+                const amount = parseFloat(curr.amount) || 0;
                 if (curr.type === 'income') {
-                    acc.income += curr.amount;
-                    acc.balance += curr.amount;
+                    acc.income += amount;
+                    acc.balance += amount;
                 } else {
-                    acc.expenses += curr.amount;
-                    acc.balance -= curr.amount;
+                    acc.expenses += amount;
+                    acc.balance -= amount;
                 }
                 return acc;
             },
@@ -50,8 +51,17 @@ export const FinanceProvider = ({ children }) => {
         setTransactions((prev) => [newTransaction, ...prev]);
     };
 
+    const deleteTransaction = (id) => {
+        setTransactions((prev) => prev.filter((t) => t.id !== id));
+    };
+
+    const updateTransaction = (id, updatedData) => {
+        setTransactions((prev) =>
+            prev.map((t) => (t.id === id ? { ...t, ...updatedData } : t))
+        );
+    };
+
     const seedTransactions = () => {
-        const { sampleTransactions } = import.meta.glob('../utils/sampleData.js', { eager: true });
         setTransactions(sampleTransactions);
     };
 

@@ -3,6 +3,7 @@ import { Card, Button } from '../ui';
 import { formatCurrency, formatDate, cn } from '../../utils/helpers';
 import { Receipt, ArrowRight, ShoppingCart, Coffee, Home, Car, Utensils, Zap, PlusCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useFinance } from '../../context/FinanceContext';
 
 const categoryIcons = {
     Food: Utensils,
@@ -15,6 +16,8 @@ const categoryIcons = {
 };
 
 export const RecentTransactions = ({ transactions, loading }) => {
+    const { seedTransactions } = useFinance();
+
     if (loading) {
         return (
             <Card className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -46,11 +49,16 @@ export const RecentTransactions = ({ transactions, loading }) => {
                     <h3 className="font-bold text-slate-900 dark:text-white">No transactions yet</h3>
                     <p className="text-slate-500 text-sm mt-1">Start tracking your expenses by adding your first transaction.</p>
                 </div>
-                <Link to="/transactions">
-                    <Button variant="outline" className="mt-2">
-                        Add Transaction <PlusCircle className="w-4 h-4" />
+                <div className="flex gap-2">
+                    <Link to="/transactions">
+                        <Button variant="outline">
+                            Add Transaction <PlusCircle className="w-4 h-4" />
+                        </Button>
+                    </Link>
+                    <Button variant="ghost" className="text-indigo-600 dark:text-indigo-400" onClick={seedTransactions}>
+                        Load Sample Data
                     </Button>
-                </Link>
+                </div>
             </Card>
         );
     }
