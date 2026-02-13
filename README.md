@@ -19,7 +19,8 @@ SpendWise is a production-level Personal Finance Dashboard built with React, fea
 
 ## 📸 Screenshots
 
-> <img width="1920" height="1080" alt="Screenshot from 2026-02-13 07-47-13" src="https://github.com/user-attachments/assets/7deb9103-8986-4c03-b785-012c2578676e" />
+><img width="1917" height="959" alt="Screenshot from 2026-02-13 08-29-41" src="https://github.com/user-attachments/assets/f79ea9f5-c10b-4a14-8fab-d0c912e6fd25" />
+
 > <img width="1917" height="959" alt="Screenshot from 2026-02-13 08-29-29" src="https://github.com/user-attachments/assets/79b76c87-5f0e-4ab2-a5c1-19d66683d124" />
 > <img width="409" height="882" alt="Screenshot from 2026-02-13 08-31-32" src="https://github.com/user-attachments/assets/6a0e16fc-6b66-47d5-8a26-6f0983e1f1e8" />
 
