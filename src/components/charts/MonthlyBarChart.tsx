@@ -1,13 +1,18 @@
 import React, { useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Transaction } from '../../types';
 
-export const MonthlyBarChart = ({ transactions }) => {
+interface MonthlyBarChartProps {
+    transactions: Transaction[];
+}
+
+export const MonthlyBarChart: React.FC<MonthlyBarChartProps> = ({ transactions }) => {
     const data = useMemo(() => {
         // Basic implementation: last 6 months
-        const last6Months = [];
+        const last6Months: { label: string; month: number; year: number; income: number; expense: number }[] = [];
         for (let i = 5; i >= 0; i--) {
             const d = new Date();
-            d.setMonth(d.getMonth() - i);
+            d.setMonth(d.setMonth(d.getMonth() - i));
             const label = d.toLocaleString('default', { month: 'short' });
             last6Months.push({ label, month: d.getMonth(), year: d.getFullYear(), income: 0, expense: 0 });
         }

@@ -1,13 +1,17 @@
 import React, { useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
-import { Card } from '../ui';
+import { Transaction } from '../../types';
+
+interface CategoryPieChartProps {
+    transactions: Transaction[];
+}
 
 const COLORS = ['#6366f1', '#10b981', '#f43f5e', '#f59e0b', '#3b82f6', '#8b5cf6', '#ec4899', '#64748b'];
 
-export const CategoryPieChart = ({ transactions }) => {
+export const CategoryPieChart: React.FC<CategoryPieChartProps> = ({ transactions }) => {
     const data = useMemo(() => {
         const expenses = transactions.filter(t => t.type === 'expense');
-        const grouped = expenses.reduce((acc, curr) => {
+        const grouped = expenses.reduce((acc: Record<string, number>, curr) => {
             acc[curr.category] = (acc[curr.category] || 0) + curr.amount;
             return acc;
         }, {});
@@ -36,7 +40,7 @@ export const CategoryPieChart = ({ transactions }) => {
                         paddingAngle={5}
                         dataKey="value"
                     >
-                        {data.map((entry, index) => (
+                        {data.map((_, index) => (
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                         ))}
                     </Pie>

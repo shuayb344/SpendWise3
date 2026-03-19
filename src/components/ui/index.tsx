@@ -1,6 +1,11 @@
+import React, { ButtonHTMLAttributes, HTMLAttributes, InputHTMLAttributes, ReactNode } from "react";
 import { cn } from "../../utils/helpers";
 
-export const Button = ({ className, variant = 'primary', ...props }) => {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'outline';
+}
+
+export const Button: React.FC<ButtonProps> = ({ className, variant = 'primary', ...props }) => {
     const variants = {
         primary: 'bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800 shadow-sm shadow-indigo-600/20',
         secondary: 'bg-slate-100 text-slate-900 hover:bg-slate-200 active:bg-slate-300 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700',
@@ -21,7 +26,11 @@ export const Button = ({ className, variant = 'primary', ...props }) => {
     );
 };
 
-export const Card = ({ className, children, ...props }) => {
+interface CardProps extends HTMLAttributes<HTMLDivElement> {
+    children: ReactNode;
+}
+
+export const Card: React.FC<CardProps> = ({ className, children, ...props }) => {
     return (
         <div
             className={cn(
@@ -35,7 +44,12 @@ export const Card = ({ className, children, ...props }) => {
     );
 };
 
-export const Input = ({ className, label, error, ...props }) => {
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+    label?: string;
+    error?: string;
+}
+
+export const Input: React.FC<InputProps> = ({ className, label, error, ...props }) => {
     return (
         <div className="space-y-1">
             {label && <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">{label}</label>}

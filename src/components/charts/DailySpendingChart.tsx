@@ -1,10 +1,15 @@
 import React, { useMemo } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Transaction } from '../../types';
 
-export const DailySpendingChart = ({ transactions }) => {
+interface DailySpendingChartProps {
+    transactions: Transaction[];
+}
+
+export const DailySpendingChart: React.FC<DailySpendingChartProps> = ({ transactions }) => {
     const data = useMemo(() => {
         // Get last 30 days
-        const days = [];
+        const days: { date: string; displayDate: string; amount: number }[] = [];
         for (let i = 29; i >= 0; i--) {
             const d = new Date();
             d.setDate(d.getDate() - i);
