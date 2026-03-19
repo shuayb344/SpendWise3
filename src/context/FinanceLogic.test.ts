@@ -1,14 +1,16 @@
 import { describe, it, expect } from 'vitest';
+import { Transaction, Totals } from '../types';
 
-const calculateTotals = (transactions) => {
+const calculateTotals = (transactions: Partial<Transaction>[]): Totals => {
     return transactions.reduce(
-        (acc, curr) => {
+        (acc: Totals, curr) => {
+            const amount = curr.amount || 0;
             if (curr.type === 'income') {
-                acc.income += curr.amount;
-                acc.balance += curr.amount;
+                acc.income += amount;
+                acc.balance += amount;
             } else {
-                acc.expenses += curr.amount;
-                acc.balance -= curr.amount;
+                acc.expenses += amount;
+                acc.balance -= amount;
             }
             return acc;
         },
@@ -18,7 +20,7 @@ const calculateTotals = (transactions) => {
 
 describe('Finance Logic', () => {
     it('should correctly calculate totals for income and expenses', () => {
-        const transactions = [
+        const transactions: Partial<Transaction>[] = [
             { type: 'income', amount: 5000 },
             { type: 'expense', amount: 1000 },
             { type: 'expense', amount: 500 },

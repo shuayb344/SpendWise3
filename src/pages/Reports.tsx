@@ -7,7 +7,7 @@ import { Card } from '../components/ui';
 import { PieChart, BarChart3, TrendingUp, DollarSign, Activity } from 'lucide-react';
 import { formatCurrency } from '../utils/helpers';
 
-const Reports = () => {
+const Reports: React.FC = () => {
     const { transactions, totals } = useFinance();
 
     return (
@@ -63,7 +63,7 @@ const Reports = () => {
                         <span className="text-sm font-medium">Savings Rate</span>
                     </div>
                     <h3 className="text-3xl font-black tabular-nums">
-                        {totals.income > 0 ? ((totals.income - totals.expenses) / totals.income * 100).toFixed(1) : 0}%
+                        {totals.income > 0 ? ((totals.income - totals.expenses) / totals.income * 100).toFixed(1) : '0'}%
                     </h3>
                     <p className="text-xs mt-2 opacity-70 italic tracking-wide">Efficiency of your budget</p>
                 </Card>

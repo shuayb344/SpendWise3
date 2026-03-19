@@ -1,26 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Button, Card, Input } from '../components/ui';
-import { Wallet, Mail, Lock, User, ArrowRight, AlertCircle } from 'lucide-react';
+import { Wallet, ArrowRight, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const Signup = () => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const { signup } = useAuth();
+const Login: React.FC = () => {
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [error, setError] = useState<string>('');
+    const { login } = useAuth();
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         setError('');
-        const res = signup(name, email, password);
+        const res = login(email, password);
         if (res.success) {
             navigate('/');
         } else {
-            setError(res.message);
+            setError(res.message || 'Login failed');
         }
     };
 
@@ -35,8 +34,8 @@ const Signup = () => {
                     <div className="inline-flex w-16 h-16 bg-indigo-600 rounded-2xl items-center justify-center shadow-xl shadow-indigo-600/20 mb-4">
                         <Wallet className="w-8 h-8 text-white" />
                     </div>
-                    <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Join SpendWise</h1>
-                    <p className="text-slate-500 dark:text-slate-400 mt-2 font-medium">Create your free account today</p>
+                    <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Welcome Back</h1>
+                    <p className="text-slate-500 dark:text-slate-400 mt-2 font-medium">Log in to manage your finances</p>
                 </div>
 
                 <Card className="p-8 border-none shadow-2xl shadow-slate-200/50 dark:shadow-none bg-white dark:bg-slate-900">
@@ -48,14 +47,6 @@ const Signup = () => {
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-6">
-                        <Input
-                            label="Full Name"
-                            type="text"
-                            placeholder="John Doe"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                        />
                         <Input
                             label="Email Address"
                             type="email"
@@ -73,15 +64,15 @@ const Signup = () => {
                             required
                         />
                         <Button type="submit" className="w-full h-12 text-lg">
-                            Get Started <ArrowRight className="w-5 h-5 ml-2" />
+                            Sign In <ArrowRight className="w-5 h-5 ml-2" />
                         </Button>
                     </form>
 
                     <div className="mt-8 text-center border-t border-slate-100 dark:border-slate-800 pt-6">
                         <p className="text-sm text-slate-500">
-                            Already have an account?{' '}
-                            <Link to="/login" className="text-indigo-600 font-bold hover:underline">
-                                Log in instead
+                            Don't have an account?{' '}
+                            <Link to="/signup" className="text-indigo-600 font-bold hover:underline">
+                                Create one for free
                             </Link>
                         </p>
                     </div>
@@ -91,4 +82,4 @@ const Signup = () => {
     );
 };
 
-export default Signup;
+export default Login;

@@ -6,7 +6,7 @@ import { BudgetManager } from '../components/dashboard/BudgetManager';
 import { CategoryPieChart } from '../components/charts/CategoryPieChart';
 import { Card } from '../components/ui';
 
-const Dashboard = () => {
+const Dashboard: React.FC = () => {
     const { transactions, totals, loading } = useFinance();
 
     return (

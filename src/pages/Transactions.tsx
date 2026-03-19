@@ -6,8 +6,8 @@ import { Button, Card } from '../components/ui';
 import { Plus, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const Transactions = () => {
-    const [isFormOpen, setIsFormOpen] = useState(false);
+const Transactions: React.FC = () => {
+    const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
 
     return (
         <div className="space-y-8">
