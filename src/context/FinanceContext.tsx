@@ -1,15 +1,17 @@
-import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, ReactNode } from 'react';
 import { useAuth } from './AuthContext';
+import { Transaction, FinanceContextType, Totals } from '../types';
+import { sampleTransactions } from '../utils/sampleData';
 
-const FinanceContext = createContext();
+const FinanceContext = createContext<FinanceContextType | undefined>(undefined);
 
-export const FinanceProvider = ({ children }) => {
+export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const { user } = useAuth();
     const userId = user?.id;
 
-    const [transactions, setTransactions] = useState([]);
-    const [budget, setBudget] = useState(0);
-    const [loading, setLoading] = useState(true);
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [budget, setBudget] = useState<number>(0);
+    const [loading, setLoading] = useState<boolean>(true);
 
     // Load user data when userId changes
     useEffect(() => {
@@ -41,10 +43,10 @@ export const FinanceProvider = ({ children }) => {
         }
     }, [budget, userId]);
 
-    const totals = useMemo(() => {
+    const totals = useMemo<Totals>(() => {
         return transactions.reduce(
             (acc, curr) => {
-                const amount = parseFloat(curr.amount) || 0;
+                const amount = curr.amount || 0;
                 if (curr.type === 'income') {
                     acc.income += amount;
                     acc.balance += amount;
@@ -58,8 +60,8 @@ export const FinanceProvider = ({ children }) => {
         );
     }, [transactions]);
 
-    const addTransaction = (transaction) => {
-        const newTransaction = {
+    const addTransaction = (transaction: Omit<Transaction, 'id'>) => {
+        const newTransaction: Transaction = {
             ...transaction,
             id: crypto.randomUUID(),
             date: transaction.date || new Date().toISOString()
@@ -67,17 +69,21 @@ export const FinanceProvider = ({ children }) => {
         setTransactions((prev) => [newTransaction, ...prev]);
     };
 
-    const deleteTransaction = (id) => {
+    const deleteTransaction = (id: string) => {
         setTransactions((prev) => prev.filter((t) => t.id !== id));
     };
 
-    const updateTransaction = (id, updatedData) => {
+    const updateTransaction = (id: string, updatedData: Partial<Transaction>) => {
         setTransactions((prev) =>
             prev.map((t) => (t.id === id ? { ...t, ...updatedData } : t))
         );
     };
 
-    const value = {
+    const seedTransactions = () => {
+        setTransactions(sampleTransactions);
+    };
+
+    const value: FinanceContextType = {
         transactions,
         totals,
         budget,
@@ -85,6 +91,7 @@ export const FinanceProvider = ({ children }) => {
         addTransaction,
         deleteTransaction,
         updateTransaction,
+        seedTransactions,
         loading
     };
 

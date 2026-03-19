@@ -1,0 +1,74 @@
+import React, { useState, useEffect, MouseEvent } from 'react';
+import { Sun, Moon, Menu } from 'lucide-react';
+import { storageService } from '../../services/storageService';
+import { motion, AnimatePresence } from 'framer-motion';
+
+interface HeaderProps {
+    toggleSidebar: () => void;
+}
+
+export const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
+    const [isDark, setIsDark] = useState<boolean>(() => {
+        const savedTheme = storageService.getTheme();
+        return savedTheme === 'dark';
+    });
+
+    // Handle initial state and state changes
+    useEffect(() => {
+        const root = document.documentElement;
+        if (isDark) {
+            root.classList.add('dark');
+            root.style.colorScheme = 'dark';
+            storageService.saveTheme('dark');
+        } else {
+            root.classList.remove('dark');
+            root.style.colorScheme = 'light';
+            storageService.saveTheme('light');
+        }
+    }, [isDark]);
+
+    const handleToggle = (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setIsDark(prev => !prev);
+    };
+
+    return (
+        <header className="sticky top-0 z-30 flex items-center justify-between p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800/80 lg:px-8 transition-all duration-300">
+            <div className="flex items-center gap-4">
+                <button
+                    onClick={toggleSidebar}
+                    className="p-2 text-slate-500 lg:hidden hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
+                    aria-label="Toggle Sidebar"
+                >
+                    <Menu className="w-6 h-6" />
+                </button>
+                <h2 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">Dashboard</h2>
+            </div>
+
+            <div className="flex items-center gap-4">
+                <button
+                    onClick={handleToggle}
+                    className="group relative p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-indigo-400 hover:scale-110 active:scale-95 shadow-sm transition-all duration-300 cursor-pointer z-50 overflow-hidden ring-1 ring-slate-200 dark:ring-slate-700/50 hover:ring-indigo-500"
+                    aria-label="Toggle Theme"
+                >
+                    <AnimatePresence mode="wait" initial={false}>
+                        <motion.div
+                            key={isDark ? 'light' : 'dark'}
+                            initial={{ y: 20, rotate: -90, opacity: 0 }}
+                            animate={{ y: 0, rotate: 0, opacity: 1 }}
+                            exit={{ y: -20, rotate: 90, opacity: 0 }}
+                            transition={{ duration: 0.25, type: "spring", stiffness: 200, damping: 15 }}
+                            className="flex items-center justify-center font-bold"
+                        >
+                            {isDark ? (
+                                <Sun className="w-5 h-5 text-amber-500 fill-amber-500/20" />
+                            ) : (
+                                <Moon className="w-5 h-5 text-indigo-600 fill-indigo-600/20" />
+                            )}
+                        </motion.div>
+                    </AnimatePresence>
+                </button>
+            </div>
+        </header>
+    );
+};

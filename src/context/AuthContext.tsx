@@ -1,14 +1,15 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { User, AuthContextType } from '../types';
 
-const AuthContext = createContext();
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(() => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const [user, setUser] = useState<User | null>(() => {
         const savedUser = localStorage.getItem('spendwise_session');
         return savedUser ? JSON.parse(savedUser) : null;
     });
 
-    const [users, setUsers] = useState(() => {
+    const [users, setUsers] = useState<User[]>(() => {
         const savedUsers = localStorage.getItem('spendwise_registered_users');
         return savedUsers ? JSON.parse(savedUsers) : [];
     });
@@ -17,7 +18,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('spendwise_registered_users', JSON.stringify(users));
     }, [users]);
 
-    const login = (email, password) => {
+    const login = (email: string, password: string) => {
         const existingUser = users.find(u => u.email === email && u.password === password);
         if (existingUser) {
             const sessionUser = { id: existingUser.id, email: existingUser.email, name: existingUser.name };
@@ -28,11 +29,11 @@ export const AuthProvider = ({ children }) => {
         return { success: false, message: 'Invalid email or password' };
     };
 
-    const signup = (name, email, password) => {
+    const signup = (name: string, email: string, password: string) => {
         if (users.find(u => u.email === email)) {
             return { success: false, message: 'User already exists' };
         }
-        const newUser = { id: Date.now().toString(), name, email, password };
+        const newUser: User = { id: Date.now().toString(), name, email, password };
         const updatedUsers = [...users, newUser];
         setUsers(updatedUsers);
 
