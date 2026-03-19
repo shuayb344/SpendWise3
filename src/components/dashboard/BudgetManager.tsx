@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import { Button, Input, Card } from '../ui';
 import { Target, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { formatCurrency, cn } from '../../utils/helpers';
 
-export const BudgetManager = () => {
+export const BudgetManager: React.FC = () => {
     const { budget, setBudget, totals } = useFinance();
-    const [isEditing, setIsEditing] = useState(false);
-    const [tempBudget, setTempBudget] = useState(budget);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [tempBudget, setTempBudget] = useState<string>(budget.toString());
 
     const handleSave = () => {
         setBudget(parseFloat(tempBudget) || 0);
@@ -82,7 +82,7 @@ export const BudgetManager = () => {
                     type="number"
                     label="Set Monthly Limit ($)"
                     value={tempBudget}
-                    onChange={(e) => setTempBudget(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setTempBudget(e.target.value)}
                     placeholder="e.g. 2000"
                     autoFocus
                 />

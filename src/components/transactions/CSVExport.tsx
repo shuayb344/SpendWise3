@@ -1,18 +1,18 @@
-import { useRef } from 'react';
+import React from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import { Button } from '../ui';
 import { Download } from 'lucide-react';
 
-export const CSVExport = () => {
+export const CSVExport: React.FC = () => {
     const { transactions } = useFinance();
 
     const exportToCSV = () => {
         if (transactions.length === 0) return;
 
-        const headers = ['Date', 'Title', 'Category', 'Amount', 'Type'];
+        const headers = ['Date', 'Description', 'Category', 'Amount', 'Type'];
         const rows = transactions.map(t => [
             t.date,
-            t.title,
+            t.description,
             t.category,
             t.amount,
             t.type

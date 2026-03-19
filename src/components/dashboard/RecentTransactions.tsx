@@ -1,11 +1,12 @@
 import React from 'react';
 import { Card, Button } from '../ui';
 import { formatCurrency, formatDate, cn } from '../../utils/helpers';
-import { Receipt, ArrowRight, ShoppingCart, Coffee, Home, Car, Utensils, Zap, PlusCircle } from 'lucide-react';
+import { Receipt, ArrowRight, ShoppingCart, Coffee, Home, Car, Utensils, Zap, PlusCircle, LucideIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useFinance } from '../../context/FinanceContext';
+import { Transaction } from '../../types';
 
-const categoryIcons = {
+const categoryIcons: Record<string, LucideIcon> = {
     Food: Utensils,
     Rent: Home,
     Transport: Car,
@@ -15,8 +16,13 @@ const categoryIcons = {
     Other: Receipt,
 };
 
-export const RecentTransactions = ({ transactions, loading }) => {
-    const { seedTransactions } = useFinance();
+interface RecentTransactionsProps {
+    transactions: Transaction[];
+    loading: boolean;
+}
+
+export const RecentTransactions: React.FC<RecentTransactionsProps> = ({ transactions, loading }) => {
+    const { addTransaction } = useFinance();
 
     if (loading) {
         return (
@@ -55,9 +61,6 @@ export const RecentTransactions = ({ transactions, loading }) => {
                             Add Transaction <PlusCircle className="w-4 h-4" />
                         </Button>
                     </Link>
-                    <Button variant="ghost" className="text-indigo-600 dark:text-indigo-400" onClick={seedTransactions}>
-                        Load Sample Data
-                    </Button>
                 </div>
             </Card>
         );
@@ -88,7 +91,7 @@ export const RecentTransactions = ({ transactions, loading }) => {
                                     <Icon className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <p className="font-semibold text-slate-900 dark:text-white">{transaction.title}</p>
+                                    <p className="font-semibold text-slate-900 dark:text-white">{transaction.description}</p>
                                     <p className="text-xs text-slate-500 dark:text-slate-400">{formatDate(transaction.date)} • {transaction.category}</p>
                                 </div>
                             </div>

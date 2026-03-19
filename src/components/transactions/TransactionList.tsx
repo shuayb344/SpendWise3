@@ -1,19 +1,22 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, ChangeEvent } from 'react';
 import { Card, Input, Button } from '../ui';
 import { useFinance } from '../../context/FinanceContext';
 import { formatCurrency, formatDate, cn } from '../../utils/helpers';
-import { Trash2, Search, Receipt, ArrowUpDown, ChevronDown } from 'lucide-react';
+import { Trash2, Search, Receipt, ArrowUpDown } from 'lucide-react';
+import { Transaction } from '../../types';
 
-export const TransactionList = () => {
+type SortKey = keyof Transaction;
+
+export const TransactionList: React.FC = () => {
     const { transactions, deleteTransaction } = useFinance();
-    const [search, setSearch] = useState('');
-    const [filter, setFilter] = useState('All');
-    const [sortConfig, setSortConfig] = useState({ key: 'date', direction: 'desc' });
+    const [search, setSearch] = useState<string>('');
+    const [filter, setFilter] = useState<string>('All');
+    const [sortConfig, setSortConfig] = useState<{ key: SortKey; direction: 'asc' | 'desc' }>({ key: 'date', direction: 'desc' });
 
     const categories = ['All', 'Expense', 'Income', 'Food', 'Rent', 'Transport', 'Salary', 'Shopping', 'Entertainment', 'Other'];
 
-    const handleSort = (key) => {
-        let direction = 'desc';
+    const handleSort = (key: SortKey) => {
+        let direction: 'asc' | 'desc' = 'desc';
         if (sortConfig.key === key && sortConfig.direction === 'desc') {
             direction = 'asc';
         }
@@ -22,7 +25,7 @@ export const TransactionList = () => {
 
     const filteredTransactions = useMemo(() => {
         let result = transactions.filter(t => {
-            const matchesSearch = t.title.toLowerCase().includes(search.toLowerCase());
+            const matchesSearch = t.description.toLowerCase().includes(search.toLowerCase());
             const matchesFilter = filter === 'All' || t.category === filter || t.type === filter.toLowerCase();
             return matchesSearch && matchesFilter;
         });
@@ -32,12 +35,12 @@ export const TransactionList = () => {
             let valB = b[sortConfig.key];
 
             if (sortConfig.key === 'amount') {
-                valA = parseFloat(valA);
-                valB = parseFloat(valB);
+                valA = valA as number;
+                valB = valB as number;
             }
 
-            if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
-            if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1;
+            if (valA! < valB!) return sortConfig.direction === 'asc' ? -1 : 1;
+            if (valA! > valB!) return sortConfig.direction === 'asc' ? 1 : -1;
             return 0;
         });
     }, [transactions, search, filter, sortConfig]);
@@ -51,7 +54,7 @@ export const TransactionList = () => {
                         placeholder="Search transactions..."
                         className="pl-10 h-11"
                         value={search}
-                        onChange={(e) => setSearch(e.target.value)}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
                     />
                 </div>
                 <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar w-full md:w-auto">
@@ -80,7 +83,7 @@ export const TransactionList = () => {
                                 <th className="px-6 py-5 font-black cursor-pointer hover:text-indigo-600 transition-colors" onClick={() => handleSort('date')}>
                                     <div className="flex items-center gap-2">Date <ArrowUpDown className="w-3 h-3" /></div>
                                 </th>
-                                <th className="px-6 py-5 font-black cursor-pointer hover:text-indigo-600 transition-colors" onClick={() => handleSort('title')}>
+                                <th className="px-6 py-5 font-black cursor-pointer hover:text-indigo-600 transition-colors" onClick={() => handleSort('description')}>
                                     <div className="flex items-center gap-2">Description <ArrowUpDown className="w-3 h-3" /></div>
                                 </th>
                                 <th className="px-6 py-5 font-black">Category</th>
@@ -100,7 +103,7 @@ export const TransactionList = () => {
                                                 {formatDate(t.date)}
                                             </td>
                                             <td className="px-6 py-4">
-                                                <p className="font-bold text-slate-900 dark:text-white truncate max-w-[200px]">{t.title}</p>
+                                                <p className="font-bold text-slate-900 dark:text-white truncate max-w-[200px]">{t.description}</p>
                                             </td>
                                             <td className="px-6 py-4">
                                                 <span className={cn(
@@ -130,7 +133,7 @@ export const TransactionList = () => {
                                 })
                             ) : (
                                 <tr>
-                                    <td colSpan="5" className="px-6 py-20 text-center">
+                                    <td colSpan={5} className="px-6 py-20 text-center">
                                         <div className="flex flex-col items-center gap-2 text-slate-400">
                                             <Receipt className="w-12 h-12 opacity-20" />
                                             <p className="text-sm font-medium italic">No matches found for "{search}"</p>

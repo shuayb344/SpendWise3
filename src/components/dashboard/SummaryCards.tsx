@@ -1,9 +1,18 @@
 import React from 'react';
-import { TrendingUp, TrendingDown, Wallet, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { TrendingUp, TrendingDown, Wallet, ArrowUpRight, ArrowDownRight, LucideIcon } from 'lucide-react';
 import { Card } from '../ui';
 import { formatCurrency, cn } from '../../utils/helpers';
+import { Totals } from '../../types';
 
-const StatCard = ({ title, amount, icon: Icon, trend, type }) => {
+interface StatCardProps {
+    title: string;
+    amount: number;
+    icon: LucideIcon;
+    trend?: number;
+    type: 'income' | 'expense' | 'balance';
+}
+
+const StatCard: React.FC<StatCardProps> = ({ title, amount, icon: Icon, trend, type }) => {
     const isIncome = type === 'income';
     const isExpense = type === 'expense';
     const isBalance = type === 'balance';
@@ -37,7 +46,11 @@ const StatCard = ({ title, amount, icon: Icon, trend, type }) => {
     );
 };
 
-export const SummaryCards = ({ totals }) => {
+interface SummaryCardsProps {
+    totals: Totals;
+}
+
+export const SummaryCards: React.FC<SummaryCardsProps> = ({ totals }) => {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <StatCard

@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent, ChangeEvent } from 'react';
 import { Card, Input, Button } from '../ui';
-import { PlusCircle, Utensils, Home, Car, Zap, ShoppingCart, Coffee, Receipt, X } from 'lucide-react';
+import { PlusCircle, Utensils, Home, Car, Zap, ShoppingCart, Coffee, Receipt, X, LucideIcon } from 'lucide-react';
 import { useFinance } from '../../context/FinanceContext';
 import { cn } from '../../utils/helpers';
+import { TransactionType } from '../../types';
 
-const categories = [
+interface Category {
+    id: string;
+    icon: LucideIcon;
+    label: string;
+}
+
+const categories: Category[] = [
     { id: 'Food', icon: Utensils, label: 'Food & Dining' },
     { id: 'Rent', icon: Home, label: 'Rent & Utilities' },
     { id: 'Transport', icon: Car, label: 'Transport' },
@@ -14,20 +21,24 @@ const categories = [
     { id: 'Other', icon: Receipt, label: 'Other' },
 ];
 
-export const TransactionForm = ({ onSuccess }) => {
+interface TransactionFormProps {
+    onSuccess?: () => void;
+}
+
+export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess }) => {
     const { addTransaction } = useFinance();
     const [formData, setFormData] = useState({
-        title: '',
+        description: '',
         amount: '',
         category: 'Other',
-        type: 'expense',
+        type: 'expense' as TransactionType,
         date: new Date().toISOString().split('T')[0]
     });
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState<Record<string, string>>({});
 
     const validate = () => {
-        const newErrors = {};
-        if (!formData.title.trim()) newErrors.title = 'Description is required';
+        const newErrors: Record<string, string> = {};
+        if (!formData.description.trim()) newErrors.description = 'Description is required';
         if (!formData.amount || parseFloat(formData.amount) <= 0) {
             newErrors.amount = 'Amount must be greater than 0';
         }
@@ -35,7 +46,7 @@ export const TransactionForm = ({ onSuccess }) => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         if (!validate()) return;
 
@@ -45,10 +56,10 @@ export const TransactionForm = ({ onSuccess }) => {
         });
 
         setFormData({
-            title: '',
+            description: '',
             amount: '',
             category: 'Other',
-            type: 'expense',
+            type: 'expense' as TransactionType,
             date: new Date().toISOString().split('T')[0]
         });
 
@@ -88,9 +99,9 @@ export const TransactionForm = ({ onSuccess }) => {
                 <Input
                     label="What did you spend on?"
                     placeholder="e.g., Grocery shopping"
-                    value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    error={errors.title}
+                    value={formData.description}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, description: e.target.value })}
+                    error={errors.description}
                 />
 
                 <div className="grid grid-cols-2 gap-4">
@@ -100,14 +111,14 @@ export const TransactionForm = ({ onSuccess }) => {
                         step="0.01"
                         placeholder="0.00"
                         value={formData.amount}
-                        onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, amount: e.target.value })}
                         error={errors.amount}
                     />
                     <Input
                         label="Date"
                         type="date"
                         value={formData.date}
-                        onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, date: e.target.value })}
                     />
                 </div>
 
